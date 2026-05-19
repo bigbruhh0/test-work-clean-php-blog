@@ -7,25 +7,34 @@ namespace App\Controllers;
 use App\Core\Request;
 use App\Core\Response;
 use App\Core\View;
+use App\Repositories\PostRepository;
 
 class PostController
 {
     public function __construct(
-        private readonly View $view
+        private readonly View $view,
+        private readonly PostRepository $posts
     ) {
     }
 
     public function show(Request $request): Response
     {
         $slug = (string) $request->route('slug', '');
+        $post = $this->posts->findBySlugWithCategories($slug);
+
+        if ($post === null) {
+            return Response::html(render_not_found(), 404);
+        }
+
+        $this->posts->incrementViews((int) $post['id']);
 
         return Response::html($this->view->render('pages/post.tpl', [
-            'pageTitle' => 'Post',
-            'post' => [
-                'title' => ucwords(str_replace('-', ' ', $slug)),
-                'description' => 'Post page is ready for the next step.',
-            ],
+            'pageTitle' => $post['title'],
+            'post' => $post,
+            'relatedPosts' => $this->posts->relatedPosts(
+                (int) $post['id'],
+                array_column($post['categories'], 'id')
+            ),
         ]));
     }
 }
-

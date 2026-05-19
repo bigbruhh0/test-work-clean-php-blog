@@ -12,6 +12,8 @@ use App\Core\Database;
 use App\Core\Request;
 use App\Core\Router;
 use App\Core\View;
+use App\Repositories\CategoryRepository;
+use App\Repositories\PostRepository;
 
 class Application
 {
@@ -67,16 +69,34 @@ class Application
             return new View($config['app']);
         });
 
+        $this->container->singleton(CategoryRepository::class, function (Container $container): CategoryRepository {
+            return new CategoryRepository($container->get(Database::class));
+        });
+
+        $this->container->singleton(PostRepository::class, function (Container $container): PostRepository {
+            return new PostRepository($container->get(Database::class));
+        });
+
         $this->container->singleton(HomeController::class, function (Container $container): HomeController {
-            return new HomeController($container->get(View::class));
+            return new HomeController(
+                $container->get(View::class),
+                $container->get(CategoryRepository::class)
+            );
         });
 
         $this->container->singleton(CategoryController::class, function (Container $container): CategoryController {
-            return new CategoryController($container->get(View::class));
+            return new CategoryController(
+                $container->get(View::class),
+                $container->get(CategoryRepository::class),
+                $container->get(PostRepository::class)
+            );
         });
 
         $this->container->singleton(PostController::class, function (Container $container): PostController {
-            return new PostController($container->get(View::class));
+            return new PostController(
+                $container->get(View::class),
+                $container->get(PostRepository::class)
+            );
         });
     }
 

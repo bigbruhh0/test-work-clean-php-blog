@@ -7,11 +7,13 @@ namespace App\Controllers;
 use App\Core\Request;
 use App\Core\Response;
 use App\Core\View;
+use App\Repositories\CategoryRepository;
 
 class HomeController
 {
     public function __construct(
-        private readonly View $view
+        private readonly View $view,
+        private readonly CategoryRepository $categories
     ) {
     }
 
@@ -19,7 +21,7 @@ class HomeController
     {
         return Response::html($this->view->render('pages/home.tpl', [
             'pageTitle' => 'Home',
+            'categories' => $this->categories->withLatestPosts(),
         ]));
     }
 }
-
