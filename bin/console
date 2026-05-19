@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 use App\Core\Database;
 use App\Core\Migrator;
+use App\Core\Seeder;
 
 $app = require dirname(__DIR__) . '/bootstrap/app.php';
 $container = $app->container();
@@ -14,6 +15,7 @@ $command = $argv[1] ?? null;
 if ($command === null) {
     fwrite(STDOUT, "Available commands:\n");
     fwrite(STDOUT, "  migrate\n");
+    fwrite(STDOUT, "  seed\n");
     exit(0);
 }
 
@@ -30,6 +32,14 @@ if ($command === 'migrate') {
         fwrite(STDOUT, "Migrated: {$migration}\n");
     }
 
+    exit(0);
+}
+
+if ($command === 'seed') {
+    $seeder = new Seeder($container->get(Database::class));
+    $seeder->run();
+
+    fwrite(STDOUT, "Database seeded.\n");
     exit(0);
 }
 
