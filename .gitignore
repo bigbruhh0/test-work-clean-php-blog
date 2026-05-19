@@ -1,7 +1,12 @@
 /vendor/
-/var/cache/
+/var/cache/**
+!/var/cache/
+!/var/cache/.gitkeep
+!/var/cache/smarty/
+!/var/cache/smarty/.gitkeep
+!/var/cache/templates_c/
+!/var/cache/templates_c/.gitkeep
 /var/log/
 /.idea/
 /.vscode/
 /.env
-

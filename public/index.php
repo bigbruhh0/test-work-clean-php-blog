@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-http_response_code(200);
-header('Content-Type: text/html; charset=utf-8');
+$app = require dirname(__DIR__) . '/bootstrap/app.php';
 
-echo '<h1>Blog project is ready for bootstrap</h1>';
+$app->run();
 
