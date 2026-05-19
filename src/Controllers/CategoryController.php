@@ -31,7 +31,7 @@ class CategoryController
         $sort = (string) $request->query('sort', 'date');
         $sort = in_array($sort, ['date', 'views'], true) ? $sort : 'date';
         $page = max(1, (int) $request->query('page', 1));
-        $perPage = 6;
+        $perPage = 2;
         $total = $this->posts->countByCategory((int) $category['id']);
         $pages = max(1, (int) ceil($total / $perPage));
         $page = min($page, $pages);

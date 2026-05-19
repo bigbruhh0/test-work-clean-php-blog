@@ -4,8 +4,9 @@
         {foreach $categories as $category}
             <section class="category-section">
                 <div class="category-section__header">
-                    <h2>{$category.name}</h2>
-                    <a href="/category/{$category.slug}">View All</a>
+                    <h2>
+                        <a href="/category/{$category.slug}">{$category.name}</a>
+                    </h2>
                 </div>
 
                 <div class="post-grid">

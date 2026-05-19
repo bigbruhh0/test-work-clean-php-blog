@@ -17,6 +17,7 @@ class View
         $this->smarty->setTemplateDir(base_path('templates'));
         $this->smarty->setCompileDir(base_path('var/cache/templates_c'));
         $this->smarty->setCacheDir(base_path('var/cache/smarty'));
+        $this->smarty->setForceCompile((bool) ($this->appConfig['debug'] ?? false));
         $this->smarty->assign('appName', $this->appConfig['name']);
         $this->smarty->assign('appUrl', $this->appConfig['url']);
     }
@@ -30,4 +31,3 @@ class View
         return $this->smarty->fetch($template);
     }
 }
-
