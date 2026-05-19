@@ -13,6 +13,11 @@ function config_path(string $path = ''): string
     return base_path('config' . DIRECTORY_SEPARATOR . $path);
 }
 
+function database_path(string $path = ''): string
+{
+    return base_path('database' . DIRECTORY_SEPARATOR . $path);
+}
+
 function env(string $key, mixed $default = null): mixed
 {
     $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
@@ -69,4 +74,3 @@ function render_not_found(): string
 </html>
 HTML;
 }
-

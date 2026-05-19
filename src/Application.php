@@ -43,6 +43,11 @@ class Application
         echo $response->getContent();
     }
 
+    public function container(): Container
+    {
+        return $this->container;
+    }
+
     private function registerServices(): void
     {
         $this->container->singleton('config', function (Container $container): array {

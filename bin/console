@@ -1,0 +1,38 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use App\Core\Database;
+use App\Core\Migrator;
+
+$app = require dirname(__DIR__) . '/bootstrap/app.php';
+$container = $app->container();
+
+$command = $argv[1] ?? null;
+
+if ($command === null) {
+    fwrite(STDOUT, "Available commands:\n");
+    fwrite(STDOUT, "  migrate\n");
+    exit(0);
+}
+
+if ($command === 'migrate') {
+    $migrator = new Migrator($container->get(Database::class), database_path('migrations'));
+    $applied = $migrator->run();
+
+    if ($applied === []) {
+        fwrite(STDOUT, "Nothing to migrate.\n");
+        exit(0);
+    }
+
+    foreach ($applied as $migration) {
+        fwrite(STDOUT, "Migrated: {$migration}\n");
+    }
+
+    exit(0);
+}
+
+fwrite(STDERR, "Unknown command: {$command}\n");
+exit(1);
+
