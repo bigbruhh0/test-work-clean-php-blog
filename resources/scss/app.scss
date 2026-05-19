@@ -22,6 +22,12 @@ body {
 
 a {
     color: inherit;
+    transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+a:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 3px;
 }
 
 img {
@@ -51,6 +57,10 @@ main {
     font-size: 15px;
     font-weight: 700;
     text-decoration: none;
+
+    &:hover {
+        color: #dceff2;
+    }
 }
 
 main {
@@ -98,6 +108,10 @@ main {
 
     a {
         text-decoration: none;
+
+        &:hover {
+            color: $color-accent;
+        }
     }
 }
 
@@ -108,12 +122,30 @@ main {
 }
 
 .post-card {
+    transition: transform 180ms ease;
+
+    &:hover {
+        transform: translateY(-3px);
+    }
+
+    a:has(img) {
+        display: block;
+        overflow: hidden;
+        border-radius: 7px;
+    }
+
     img {
         width: 100%;
         aspect-ratio: 16 / 10;
         border-radius: 7px;
         object-fit: cover;
         background: $color-soft;
+        transition: transform 220ms ease, filter 220ms ease;
+    }
+
+    a:hover img {
+        transform: scale(1.04);
+        filter: saturate(1.08);
     }
 
     h2,
@@ -124,6 +156,10 @@ main {
 
         a {
             text-decoration: none;
+
+            &:hover {
+                color: $color-accent;
+            }
         }
     }
 
@@ -142,9 +178,17 @@ main {
     }
 
     > a:last-child {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 0 1px;
         color: $color-accent;
         font-size: 12px;
         font-weight: 700;
+
+        &:hover {
+            color: $color-brand;
+        }
     }
 }
 
@@ -181,16 +225,46 @@ main {
 .sort-links a,
 .category-links a,
 .pagination a {
-    padding: 6px 10px;
+    padding: 7px 12px;
     border: 1px solid $color-line;
     border-radius: 6px;
     color: $color-brand;
     font-size: 13px;
+    font-weight: 700;
     text-decoration: none;
+
+    &:hover {
+        border-color: $color-brand;
+        background: rgba(40, 89, 103, 0.08);
+        box-shadow: 0 6px 16px rgba(40, 89, 103, 0.12);
+        transform: translateY(-1px);
+    }
 }
 
 .category-links a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px;
+    border-color: rgba(155, 95, 79, 0.22);
+    background: rgba(155, 95, 79, 0.06);
     color: $color-accent;
+    font-size: 12px;
+
+    &::before {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: $color-accent;
+        content: "";
+    }
+
+    &:hover {
+        border-color: $color-accent;
+        background: rgba(155, 95, 79, 0.09);
+        box-shadow: 0 6px 16px rgba(155, 95, 79, 0.12);
+    }
 }
 
 .sort-links a[aria-current="page"],
@@ -198,6 +272,11 @@ main {
     border-color: $color-brand;
     background: $color-brand;
     color: #ffffff;
+
+    &:hover {
+        background: #1f4854;
+        color: #ffffff;
+    }
 }
 
 .pagination {
@@ -235,9 +314,13 @@ main {
     display: flex;
     flex-wrap: wrap;
     gap: 14px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     color: $color-muted;
     font-size: 13px;
+}
+
+.post-detail .category-links {
+    margin-top: 4px;
 }
 
 .post-content {
