@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Core\Database;
+use App\Services\ImageUrlResolver;
 use PDO;
 
 class CategoryRepository
 {
     public function __construct(
-        private readonly Database $database
+        private readonly Database $database,
+        private readonly ImageUrlResolver $images
     ) {
     }
 
@@ -59,11 +61,20 @@ class CategoryRepository
         $statement->bindValue('limit', $limit, PDO::PARAM_INT);
         $statement->execute();
 
-        return $statement->fetchAll();
+        return $this->withImageUrls($statement->fetchAll());
     }
 
     private function connection(): PDO
     {
         return $this->database->connection();
+    }
+
+    private function withImageUrls(array $posts): array
+    {
+        foreach ($posts as $index => $post) {
+            $posts[$index]['image_url'] = $this->images->resolve($post['image'] ?? null);
+        }
+
+        return $posts;
     }
 }

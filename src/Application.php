@@ -14,6 +14,7 @@ use App\Core\Router;
 use App\Core\View;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
+use App\Services\ImageUrlResolver;
 
 class Application
 {
@@ -55,6 +56,7 @@ class Application
         $this->container->singleton('config', function (Container $container): array {
             return [
                 'app' => require config_path('app.php'),
+                'assets' => require config_path('assets.php'),
                 'database' => require config_path('database.php'),
             ];
         });
@@ -69,12 +71,23 @@ class Application
             return new View($config['app']);
         });
 
+        $this->container->singleton(ImageUrlResolver::class, function (Container $container): ImageUrlResolver {
+            $config = $container->get('config');
+            return new ImageUrlResolver($config['assets']['url']);
+        });
+
         $this->container->singleton(CategoryRepository::class, function (Container $container): CategoryRepository {
-            return new CategoryRepository($container->get(Database::class));
+            return new CategoryRepository(
+                $container->get(Database::class),
+                $container->get(ImageUrlResolver::class)
+            );
         });
 
         $this->container->singleton(PostRepository::class, function (Container $container): PostRepository {
-            return new PostRepository($container->get(Database::class));
+            return new PostRepository(
+                $container->get(Database::class),
+                $container->get(ImageUrlResolver::class)
+            );
         });
 
         $this->container->singleton(HomeController::class, function (Container $container): HomeController {

@@ -9,6 +9,13 @@ services:
     depends_on:
       - php
 
+  images:
+    image: nginx:1.27-alpine
+    ports:
+      - "8081:80"
+    volumes:
+      - ./storage/images:/usr/share/nginx/html:ro
+
   php:
     build:
       context: .

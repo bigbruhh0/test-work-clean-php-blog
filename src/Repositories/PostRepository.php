@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Core\Database;
+use App\Services\ImageUrlResolver;
 use PDO;
 
 class PostRepository
 {
     public function __construct(
-        private readonly Database $database
+        private readonly Database $database,
+        private readonly ImageUrlResolver $images
     ) {
     }
 
@@ -50,7 +52,7 @@ class PostRepository
         $statement->bindValue('offset', $offset, PDO::PARAM_INT);
         $statement->execute();
 
-        return $statement->fetchAll();
+        return $this->withImageUrls($statement->fetchAll());
     }
 
     public function findBySlugWithCategories(string $slug): ?array
@@ -65,6 +67,7 @@ class PostRepository
         }
 
         $post['categories'] = $this->categoriesForPost((int) $post['id']);
+        $post = $this->withImageUrl($post);
 
         return $post;
     }
@@ -108,7 +111,7 @@ class PostRepository
         $statement->bindValue('limit', $limit, PDO::PARAM_INT);
         $statement->execute();
 
-        return $statement->fetchAll();
+        return $this->withImageUrls($statement->fetchAll());
     }
 
     private function categoriesForPost(int $postId): array
@@ -129,5 +132,21 @@ class PostRepository
     private function connection(): PDO
     {
         return $this->database->connection();
+    }
+
+    private function withImageUrls(array $posts): array
+    {
+        foreach ($posts as $index => $post) {
+            $posts[$index] = $this->withImageUrl($post);
+        }
+
+        return $posts;
+    }
+
+    private function withImageUrl(array $post): array
+    {
+        $post['image_url'] = $this->images->resolve($post['image'] ?? null);
+
+        return $post;
     }
 }
