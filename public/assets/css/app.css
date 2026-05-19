@@ -1,0 +1,271 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: #24333a;
+  background: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.container,
+main {
+  width: min(100% - 40px, 980px);
+  margin: 0 auto;
+}
+
+.site-header {
+  background: #285967;
+  color: #ffffff;
+}
+.site-header .container {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+}
+
+.site-logo {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+main {
+  padding: 48px 0 68px;
+}
+
+.site-footer {
+  margin-top: 28px;
+  padding: 58px 0;
+  background: #285967;
+  color: #ffffff;
+  text-align: center;
+}
+.site-footer p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.category-section {
+  margin-bottom: 78px;
+}
+
+.category-section__header,
+.category-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.category-section__header h2,
+.category-hero h1,
+.post-detail h1,
+.related-posts h2 {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.category-section__header h2 {
+  font-size: 14px;
+  text-transform: uppercase;
+}
+.category-section__header h2 a {
+  text-decoration: none;
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.post-card img {
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 7px;
+  object-fit: cover;
+  background: #f6f8f7;
+}
+.post-card h2,
+.post-card h3 {
+  margin: 13px 0 5px;
+  font-size: 15px;
+  line-height: 1.35;
+}
+.post-card h2 a,
+.post-card h3 a {
+  text-decoration: none;
+}
+.post-card time,
+.post-card span {
+  display: block;
+  color: #71828c;
+  font-size: 12px;
+}
+.post-card p {
+  margin: 12px 0 10px;
+  color: #71828c;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.post-card > a:last-child {
+  color: #9b5f4f;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.category-hero {
+  max-width: 680px;
+  margin-bottom: 30px;
+}
+.category-hero h1 {
+  font-size: 34px;
+}
+.category-hero p {
+  margin: 12px 0 0;
+  color: #71828c;
+}
+
+.category-toolbar {
+  padding: 14px 0;
+  border-top: 1px solid #dfe6e8;
+  border-bottom: 1px solid #dfe6e8;
+  color: #71828c;
+  font-size: 14px;
+}
+
+.sort-links,
+.category-links,
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sort-links a,
+.category-links a,
+.pagination a {
+  padding: 6px 10px;
+  border: 1px solid #dfe6e8;
+  border-radius: 6px;
+  color: #285967;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.category-links a {
+  color: #9b5f4f;
+}
+
+.sort-links a[aria-current=page],
+.pagination a[aria-current=page] {
+  border-color: #285967;
+  background: #285967;
+  color: #ffffff;
+}
+
+.pagination {
+  margin-top: 34px;
+}
+
+.post-detail {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.post-detail > img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #f6f8f7;
+}
+.post-detail header {
+  margin: 28px 0;
+}
+.post-detail h1 {
+  font-size: 42px;
+}
+.post-detail header > p {
+  margin: 14px 0 18px;
+  color: #71828c;
+  font-size: 18px;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+  color: #71828c;
+  font-size: 13px;
+}
+
+.post-content p {
+  margin: 0 0 18px;
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.related-posts {
+  margin-top: 72px;
+}
+.related-posts h2 {
+  margin-bottom: 22px;
+  font-size: 24px;
+}
+
+.empty-state {
+  padding: 52px 0;
+  text-align: center;
+}
+.empty-state h1,
+.empty-state h2 {
+  margin: 0 0 10px;
+}
+.empty-state p {
+  margin: 0;
+  color: #71828c;
+}
+
+@media (max-width: 760px) {
+  .container,
+  main {
+    width: min(100% - 28px, 980px);
+  }
+  main {
+    padding-top: 34px;
+  }
+  .category-section {
+    margin-bottom: 54px;
+  }
+  .category-section__header,
+  .category-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .post-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .category-hero h1,
+  .post-detail h1 {
+    font-size: 30px;
+  }
+}
