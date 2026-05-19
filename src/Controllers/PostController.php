@@ -27,6 +27,8 @@ class PostController
         }
 
         $this->posts->incrementViews((int) $post['id']);
+        $post['views'] = (int) $post['views'] + 1;
+        $post['paragraphs'] = preg_split('/\R{2,}/', trim((string) $post['content'])) ?: [];
 
         return Response::html($this->view->render('pages/post.tpl', [
             'pageTitle' => $post['title'],
