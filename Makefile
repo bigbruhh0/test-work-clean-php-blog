@@ -13,6 +13,9 @@ migrate:
 seed:
 	docker compose run --rm php php bin/console seed
 
+scss:
+	npx sass --no-source-map resources/scss/app.scss public/assets/css/app.css
+
 restart:
 	docker compose down
 	docker compose up -d --build
