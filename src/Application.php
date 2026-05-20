@@ -6,6 +6,7 @@ namespace App;
 
 use App\Controllers\CategoryController;
 use App\Controllers\HomeController;
+use App\Controllers\ManageController;
 use App\Controllers\PostController;
 use App\Core\Container;
 use App\Core\Database;
@@ -14,6 +15,7 @@ use App\Core\Router;
 use App\Core\View;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
+use App\Services\ImageUploader;
 use App\Services\ImageUrlResolver;
 
 class Application
@@ -35,6 +37,7 @@ class Application
     public function run(): void
     {
         $request = Request::capture();
+        $this->container->get(View::class)->assign('formCategories', $this->container->get(CategoryRepository::class)->all());
         $response = $this->router->dispatch($request);
 
         http_response_code($response->getStatusCode());
@@ -76,6 +79,10 @@ class Application
             return new ImageUrlResolver($config['assets']['url']);
         });
 
+        $this->container->singleton(ImageUploader::class, function (): ImageUploader {
+            return new ImageUploader();
+        });
+
         $this->container->singleton(CategoryRepository::class, function (Container $container): CategoryRepository {
             return new CategoryRepository(
                 $container->get(Database::class),
@@ -111,6 +118,14 @@ class Application
                 $container->get(PostRepository::class)
             );
         });
+
+        $this->container->singleton(ManageController::class, function (Container $container): ManageController {
+            return new ManageController(
+                $container->get(CategoryRepository::class),
+                $container->get(PostRepository::class),
+                $container->get(ImageUploader::class)
+            );
+        });
     }
 
     private function registerRoutes(): void
@@ -118,5 +133,7 @@ class Application
         $this->router->get('/', fn (Request $request) => $this->container->get(HomeController::class)->index($request));
         $this->router->get('/category/{slug}', fn (Request $request) => $this->container->get(CategoryController::class)->show($request));
         $this->router->get('/post/{slug}', fn (Request $request) => $this->container->get(PostController::class)->show($request));
+        $this->router->post('/categories', fn (Request $request) => $this->container->get(ManageController::class)->storeCategory($request));
+        $this->router->post('/posts', fn (Request $request) => $this->container->get(ManageController::class)->storePost($request));
     }
 }

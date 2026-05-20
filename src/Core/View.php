@@ -30,4 +30,9 @@ class View
 
         return $this->smarty->fetch($template);
     }
+
+    public function assign(string $key, mixed $value): void
+    {
+        $this->smarty->assign($key, $value);
+    }
 }

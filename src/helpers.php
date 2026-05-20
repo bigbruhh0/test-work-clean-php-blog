@@ -18,6 +18,27 @@ function database_path(string $path = ''): string
     return base_path('database' . DIRECTORY_SEPARATOR . $path);
 }
 
+function storage_path(string $path = ''): string
+{
+    return base_path('storage' . DIRECTORY_SEPARATOR . $path);
+}
+
+function slugify(string $value): string
+{
+    $value = trim($value);
+    $converted = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value);
+
+    if ($converted !== false) {
+        $value = $converted;
+    }
+
+    $value = strtolower($value);
+    $value = preg_replace('/[^a-z0-9]+/', '-', $value) ?? '';
+    $value = trim($value, '-');
+
+    return $value !== '' ? $value : 'item';
+}
+
 function env(string $key, mixed $default = null): mixed
 {
     $value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);

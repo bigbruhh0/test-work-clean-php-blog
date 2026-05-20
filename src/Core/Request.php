@@ -10,6 +10,8 @@ class Request
         private readonly string $method,
         private readonly string $path,
         private readonly array $query = [],
+        private readonly array $post = [],
+        private readonly array $files = [],
         private array $routeParameters = []
     ) {
     }
@@ -22,7 +24,9 @@ class Request
         return new self(
             strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET'),
             $path,
-            $_GET
+            $_GET,
+            $_POST,
+            $_FILES
         );
     }
 
@@ -41,6 +45,16 @@ class Request
         return $this->query[$key] ?? $default;
     }
 
+    public function input(string $key, mixed $default = null): mixed
+    {
+        return $this->post[$key] ?? $default;
+    }
+
+    public function file(string $key): ?array
+    {
+        return $this->files[$key] ?? null;
+    }
+
     public function route(string $key, mixed $default = null): mixed
     {
         return $this->routeParameters[$key] ?? $default;
@@ -54,4 +68,3 @@ class Request
         return $clone;
     }
 }
-

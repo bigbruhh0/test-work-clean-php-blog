@@ -26,6 +26,33 @@ class CategoryRepository
         return $category ?: null;
     }
 
+    public function all(): array
+    {
+        $statement = $this->connection()->query('SELECT * FROM categories ORDER BY name ASC');
+
+        return $statement->fetchAll();
+    }
+
+    public function create(string $name, string $description): array
+    {
+        $slug = $this->uniqueSlug(slugify($name));
+        $statement = $this->connection()->prepare(
+            'INSERT INTO categories (name, slug, description) VALUES (:name, :slug, :description)'
+        );
+        $statement->execute([
+            'name' => $name,
+            'slug' => $slug,
+            'description' => $description,
+        ]);
+
+        return [
+            'id' => (int) $this->connection()->lastInsertId(),
+            'name' => $name,
+            'slug' => $slug,
+            'description' => $description,
+        ];
+    }
+
     public function withLatestPosts(int $limit = 3): array
     {
         $statement = $this->connection()->query(
@@ -67,6 +94,19 @@ class CategoryRepository
     private function connection(): PDO
     {
         return $this->database->connection();
+    }
+
+    private function uniqueSlug(string $baseSlug): string
+    {
+        $slug = $baseSlug;
+        $index = 2;
+
+        while ($this->findBySlug($slug) !== null) {
+            $slug = $baseSlug . '-' . $index;
+            $index++;
+        }
+
+        return $slug;
     }
 
     private function withImageUrls(array $posts): array

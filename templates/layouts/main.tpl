@@ -12,5 +12,6 @@
         {$content nofilter}
     </main>
     {include file='partials/footer.tpl'}
+    <script src="/assets/js/app.js"></script>
 </body>
 </html>

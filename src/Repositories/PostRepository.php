@@ -72,6 +72,50 @@ class PostRepository
         return $post;
     }
 
+    public function create(array $data, array $categoryIds): array
+    {
+        $connection = $this->connection();
+        $connection->beginTransaction();
+
+        try {
+            $slug = $this->uniqueSlug(slugify((string) $data['title']));
+            $statement = $connection->prepare(
+                'INSERT INTO posts (title, slug, image, description, content, views, published_at)
+                VALUES (:title, :slug, :image, :description, :content, 0, :published_at)'
+            );
+            $statement->execute([
+                'title' => $data['title'],
+                'slug' => $slug,
+                'image' => $data['image'],
+                'description' => $data['description'],
+                'content' => $data['content'],
+                'published_at' => $data['published_at'],
+            ]);
+
+            $postId = (int) $connection->lastInsertId();
+            $categoryStatement = $connection->prepare(
+                'INSERT INTO post_category (post_id, category_id) VALUES (:post_id, :category_id)'
+            );
+
+            foreach ($categoryIds as $categoryId) {
+                $categoryStatement->execute([
+                    'post_id' => $postId,
+                    'category_id' => (int) $categoryId,
+                ]);
+            }
+
+            $connection->commit();
+
+            return [
+                'id' => $postId,
+                'slug' => $slug,
+            ];
+        } catch (\Throwable $exception) {
+            $connection->rollBack();
+            throw $exception;
+        }
+    }
+
     public function incrementViews(int $postId): void
     {
         $statement = $this->connection()->prepare('UPDATE posts SET views = views + 1 WHERE id = :id');
@@ -132,6 +176,19 @@ class PostRepository
     private function connection(): PDO
     {
         return $this->database->connection();
+    }
+
+    private function uniqueSlug(string $baseSlug): string
+    {
+        $slug = $baseSlug;
+        $index = 2;
+
+        while ($this->findBySlugWithCategories($slug) !== null) {
+            $slug = $baseSlug . '-' . $index;
+            $index++;
+        }
+
+        return $slug;
     }
 
     private function withImageUrls(array $posts): array

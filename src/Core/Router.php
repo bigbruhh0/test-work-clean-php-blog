@@ -16,6 +16,14 @@ class Router
         ];
     }
 
+    public function post(string $pattern, callable $handler): void
+    {
+        $this->routes['POST'][] = [
+            'pattern' => $pattern,
+            'handler' => $handler,
+        ];
+    }
+
     public function dispatch(Request $request): Response
     {
         $routes = $this->routes[$request->method()] ?? [];
@@ -57,4 +65,3 @@ class Router
         return array_combine($parameterNames, $matches) ?: [];
     }
 }
-

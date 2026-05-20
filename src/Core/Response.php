@@ -18,6 +18,11 @@ class Response
         return new self($content, $statusCode, $headers + ['Content-Type' => 'text/html; charset=utf-8']);
     }
 
+    public static function redirect(string $url): self
+    {
+        return new self('', 302, ['Location' => $url]);
+    }
+
     public function getContent(): string
     {
         return $this->content;
@@ -33,4 +38,3 @@ class Response
         return $this->headers;
     }
 }
-
