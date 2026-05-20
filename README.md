@@ -113,3 +113,7 @@ make scss
 ```
 
 This command uses local `npx` and writes the compiled file to `public/assets/css/app.css`.
+
+## AI Usage
+
+AI was used selectively as a reference tool: to clarify separate technical decisions, prepare test data, generate images, generate SCSS, check the project structure and help with README wording.
